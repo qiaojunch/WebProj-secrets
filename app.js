@@ -1,5 +1,5 @@
 //jshint esversion:6
-
+require("dotenv").config();   // configure your secret info
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
@@ -22,9 +22,8 @@ const userSchema = new mongoose.Schema({
     email: String,
     password: String
 });
-var secret = "Thisisalittlesecret";
 
-userSchema.plugin( encrypt, {secret: secret, encryptionFields: ["password"]} );
+userSchema.plugin( encrypt, {secret: process.env.SECRET, encryptedFields: ["password"]} );
 
 const User = mongoose.model("User", userSchema);
 
@@ -64,8 +63,8 @@ app.post("/login", function(req, res){
             console.log(err);
         } else {
             if(foundUser.password === password){
-                
-                res.render("secret");
+
+                res.render("secrets");
             }
         }
     })
